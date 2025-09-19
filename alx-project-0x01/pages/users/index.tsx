@@ -3,10 +3,10 @@ import UserCard from "@/components/common/UserCard";
 import { UserProps } from "@/interfaces";
 
 interface UsersPageProps {
-  users: UserProps[];
+  posts: UserProps[];
 }
 
-const Users: React.FC<UsersPageProps> = ({ post }) => {
+const Users: React.FC<UsersPageProps> = ({ posts }) => {
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -18,8 +18,8 @@ const Users: React.FC<UsersPageProps> = ({ post }) => {
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          {post.map((user) => (
-            <UserCard key={user.id} {...user} />
+          {posts.map((post) => (
+            <UserCard key={post.id} {...post} />
           ))}
         </div>
       </main>
