@@ -1,28 +1,45 @@
 import Header from "@/components/layout/Header";
 import UserCard from "@/components/common/UserCard";
-import { UserProps } from "@/interfaces";
+import UserModal from "@/components/common/UserModal";
+import { UserProps, UserData } from "@/interfaces";
+import { useState } from "react";
 
 interface UsersPageProps {
-  posts: UserProps[];
+  users: UserProps[];
 }
 
-const Users: React.FC<UsersPageProps> = ({ posts }) => {
+const Users: React.FC<UsersPageProps> = ({ users }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [localUsers, setLocalUsers] = useState<UserProps[]>(users);
+
+  const handleAddUser = (newUser: UserData) => {
+    const userWithId = { ...newUser, id: localUsers.length + 1 };
+    setLocalUsers((prev) => [...prev, userWithId]);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <main className="p-4">
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-4">
           <h1 className="text-2xl font-semibold">Users</h1>
-          <button className="bg-blue-700 px-4 py-2 rounded-full text-white">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+          >
             Add User
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          {posts.map((post) => (
-            <UserCard key={post.id} {...post} />
+          {localUsers.map((user) => (
+            <UserCard key={user.id} {...user} />
           ))}
         </div>
       </main>
+
+      {isModalOpen && (
+        <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
+      )}
     </div>
   );
 };
@@ -32,9 +49,7 @@ export async function getStaticProps() {
   const users = await response.json();
 
   return {
-    props: {
-      users,
-    },
+    props: { users },
   };
 }
 
