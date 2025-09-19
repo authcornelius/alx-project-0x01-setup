@@ -10,11 +10,11 @@ interface UsersPageProps {
 
 const Users: React.FC<UsersPageProps> = ({ users }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [localUsers, setLocalUsers] = useState<UserProps[]>(users);
+  const [posts, setPosts] = useState<UserProps[]>(users);
 
   const handleAddUser = (newUser: UserData) => {
-    const userWithId = { ...newUser, id: localUsers.length + 1 };
-    setLocalUsers((prev) => [...prev, userWithId]);
+    const userWithId = { ...newUser, id: posts.length + 1 };
+    setPosts((prev) => [...prev, userWithId]);
   };
 
   return (
@@ -31,14 +31,17 @@ const Users: React.FC<UsersPageProps> = ({ users }) => {
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          {localUsers.map((user) => (
+          {posts.map((user) => (
             <UserCard key={user.id} {...user} />
           ))}
         </div>
       </main>
 
       {isModalOpen && (
-        <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
+        <UserModal
+          onClose={() => setModalOpen(false)}
+          onSubmit={handleAddUser}
+        />
       )}
     </div>
   );
